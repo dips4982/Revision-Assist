@@ -1,0 +1,74 @@
+*{
+    margin: auto;
+}
+
+.container .heading{
+    text-align: center;
+    font-size: xx-large;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.form-container #form-body{
+    padding: 2%;
+    width: 40%;
+    border: 1px solid rgb(70, 62, 50);
+    margin: auto;
+}
+
+.resultgroup p{
+    font-weight: bold;
+    color: darkgreen;
+    padding:5%;
+    margin-top: 2%;
+    margin: auto;
+    text-align: center;
+}
+
+@media (max-width:  450px)
+{
+    .form-container #form-body{
+    padding: 4%;
+    width: 80%;
+    border: 1px solid rgb(70, 62, 50);
+    margin: auto;
+    }
+
+    .resultgroup{
+        margin: auto;
+        color: darkgreen;
+        padding:5%;
+        margin-top: 2%;
+    }
+}
+
+.form-container #form-title{
+    padding: 2%;
+    width: 60%;
+    margin: auto;
+    text-align: center;
+}
+
+.form-container #submit{
+    margin:auto;
+    margin-top:5%;
+}
+
+.input-group{
+    margin: auto;
+}
+
+.input-group #customFile{
+    width: 100%;
+    border: 1px black solid;
+    border-radius: 3px;
+}
+
+.input-group .note{
+    font-size: 80%;
+    text-align: left;
+}
+
+#error {
+    color:red;
+    font-size: smaller;
+}

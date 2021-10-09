@@ -1,0 +1,96 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+    <h1>Pose Matcher</h1>
+    <div class="form-container">
+
+        <form id='formid'>
+            <div class="input-group">
+                <label>Golden Image:</label>
+                <input type="file" class="input-group-file" onchange="encodeImageFileAsURL(this)" name="ele1"
+                    required /><br>
+            </div>
+            <div class="input-group">
+                <label>Test Image: </label>
+                <input type="file" class="input-group-file" onchange="encodeImageFileAsURL(this)" name="ele2"
+                    required /><br><br>
+            </div>
+            <div class="input-group">
+                <button type='submit' id='mybutton' class="btn btn-dark">Match</button>
+            </div>
+        </form>
+    </div>
+    <p id='result'></p>
+    <div id="div1">
+        <img id="image1" scr="#" hidden>
+    </div>
+    <div id="div2">
+        <img id="image2" scr="#" hidden>
+    </div>
+    <div id="div3">
+        <img id="image3" scr="#" hidden>
+    </div>
+</div>
+
+{% endblock %} {% block script %}
+<script>
+    var mystrings = [];
+    var i = 0;
+
+    function encodeImageFileAsURL(element) {
+        console.log(element.name);
+        console.log("Fired!");
+        var file = element.files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        if (element.name == 'ele1') {
+            reader.onloadend = function (e) {
+                //console.log(reader.result);
+                mystrings[0] = (reader.result.replace(/^data:image\/[a-z]+;base64,/, ""));
+
+            }
+        } else if (element.name == 'ele2') {
+            reader.onloadend = function (e) {
+                mystrings[1] = (reader.result.replace(/^data:image\/[a-z]+;base64,/, ""));
+                //console.log(mystrings[1])
+
+            }
+        }
+    }
+    $(document).ready(function () {
+        $('#formid').submit(function (e) {
+            $('#result').empty()
+            $('#result').append('Calculating...')
+
+
+            $.post('/comparejs', {
+                javascript_data: JSON.stringify({
+                    'images': mystrings
+                })
+            },
+                (data, status, jqXHR) => {
+                    $('#result').empty();
+                    data1 = JSON.parse(data);
+
+                    image1_string = data1.Image1;
+                    image2_string = data1.Image2;
+                    error_image = data1.ErrorImage;
+
+                    $('#result').append('Match: ' + data1.Match + '%');
+
+                    $('#image1').remove();
+                    $('#div1').after('<img src="' + image1_string + '" id="image1" height="300"/>');
+
+                    $('#image2').remove();
+                    $('#div2').after('<img src="' + image2_string + '" id="image2"  height="300"/>');
+
+                    $('#image3').remove();
+                    $('#div3').after('<img src="' + error_image + '" id="image3"  height="300"/>');
+                }
+            )
+            e.preventDefault();
+            return false;
+        });
+    });
+</script>
+{% endblock %}
